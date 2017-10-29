@@ -17,4 +17,8 @@ public class BPEdge {
     public void addW(double t) {
         w = w + t;
     }
+
+    public static void main(String[] args) {
+
+    }
 }

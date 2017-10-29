@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BP.iml" filepath="$PROJECT_DIR$/.idea/modules/BP.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BP_main.iml" filepath="$PROJECT_DIR$/.idea/modules/BP_main.iml" group="BP" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BP_test.iml" filepath="$PROJECT_DIR$/.idea/modules/BP_test.iml" group="BP" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BP-Algorithm.iml" filepath="$PROJECT_DIR$/.idea/modules/BP-Algorithm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BP-Algorithm_main.iml" filepath="$PROJECT_DIR$/.idea/modules/BP-Algorithm_main.iml" group="BP-Algorithm" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BP-Algorithm_test.iml" filepath="$PROJECT_DIR$/.idea/modules/BP-Algorithm_test.iml" group="BP-Algorithm" />
     </modules>
   </component>
 </project>

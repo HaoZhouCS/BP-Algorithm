@@ -5,8 +5,8 @@
       <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
-      <module name="BP_main" target="1.8" />
-      <module name="BP_test" target="1.8" />
+      <module name="BP-Algorithm_main" target="1.8" />
+      <module name="BP-Algorithm_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
