@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 import static pers.zhouhao.bp.BPNode.Type.HIDDEN_NODE;
 import static pers.zhouhao.bp.BPNode.Type.INPUT_NODE;
 import static pers.zhouhao.bp.BPNode.Type.OUTPUT_NODE;
+import static pers.zhouhao.bp.ErrorInfo.ErrorCode.INIT_STUDY_INPUTNODE_NUM_ERROR;
+import static pers.zhouhao.bp.ErrorInfo.ErrorCode.INIT_STUDY_OUTPUTNODE_NUM_ERROR;
+import static pers.zhouhao.bp.ErrorInfo.ErrorCode.IS_OK;
 
 /**
  * Created by lenovo on 2017/10/5.
@@ -19,12 +22,14 @@ public class BackPropagation {
 
     private final double c;
 
-    private final int inputNodes = 2;
-    private final int outputNodes = 4;
+    private int inputNodes = 1;
+    private int outputNodes = 1;
 
     private int LayerNum = 3;
     private int LayerNodes = 4;
 
+    private final int minInputNodes = 1;
+    private final int minOutputNodes = 1;
     private final int maxLayerNum = 10;
     private final int minLayerNum = 2;
     private final int maxLayerNodes = 10;
@@ -39,15 +44,19 @@ public class BackPropagation {
         initNetwork();
     }
 
-    public BackPropagation(int _LayerNum, int _LayerNodes, double _c) {
+    public BackPropagation(int _inputNodes, int _outputNodes, int _LayerNum, int _LayerNodes, double _c) {
 
         c = _c;
 
-        if(_LayerNum > maxLayerNum || _LayerNum < minLayerNum) {
+        if(_inputNodes < minInputNodes || _outputNodes < minOutputNodes) {
+            System.out.println("InputNodes or OutputNodes should be not less than one");
+        } else if(_LayerNum > maxLayerNum || _LayerNum < minLayerNum) {
             System.out.println("Layer number exceeds the limits");
         } else if(_LayerNodes > maxLayerNodes || _LayerNodes < minLayerNodes) {
             System.out.println("Layer nodes exceed the limits");
         } else {
+            inputNodes = _inputNodes;
+            outputNodes = _outputNodes;
             LayerNum = _LayerNum;
             LayerNodes = _LayerNodes;
             initNetwork();
@@ -170,18 +179,34 @@ public class BackPropagation {
                 .reduce(0.0, (a, b) -> a + b);
     }
 
-    public void study(double x, double y, int type) {
+    private ErrorInfo initStudy(List<Double> inputLayerValue, List<Double> outputLayerValue) {
 
-        inputLayer.get(0).setX(x);
-        inputLayer.get(1).setX(y);
+        ErrorInfo errorInfo = new ErrorInfo();
+        if(inputLayerValue.size() != inputNodes) {
+            errorInfo.setCode(INIT_STUDY_INPUTNODE_NUM_ERROR);
+        } else if(outputLayerValue.size() != outputNodes) {
+            errorInfo.setCode(INIT_STUDY_OUTPUTNODE_NUM_ERROR);
+        } else {
+            for(int i = 0;i < inputNodes;i ++) {
+                inputLayer.get(i).setX(inputLayerValue.get(i));
+            }
+            for(int i = 0;i < outputNodes;i ++) {
+                outputLayer.get(i).setY(outputLayerValue.get(i));
+            }
+        }
 
-        outputLayer.get(0).setY(type == 1? 1 : 0);
-        outputLayer.get(1).setY(type == 2? 1 : 0);
-        outputLayer.get(2).setY(type == 3? 1 : 0);
-        outputLayer.get(3).setY(type == 4? 1 : 0);
+        return errorInfo;
+    }
 
-        forward();
-        backward();
+    public void study(List<Double> inputLayerValue, List<Double> outputLayerValue) {
+
+        ErrorInfo info = initStudy(inputLayerValue, outputLayerValue);
+        if(info.getCode() != IS_OK) {
+            System.out.println(info.getInfo());
+        } else {
+            forward();
+            backward();
+        }
     }
 
     public int predict(double x, double y) {
