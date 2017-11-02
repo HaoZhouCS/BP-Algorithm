@@ -209,22 +209,34 @@ public class BackPropagation {
         }
     }
 
-    public int predict(double x, double y) {
+    private ErrorInfo initPredict(List<Double> inputLayerValue) {
 
-        inputLayer.get(0).setX(x);
-        inputLayer.get(1).setX(y);
-
-        forward();
-
-        double max = -100;
-        int pred = -1;
-        for(int i = 0;i < outputNodes;i ++) {
-            if(max < outputLayer.get(i).getX()) {
-                max = outputLayer.get(i).getX();
-                pred = i + 1;
+        ErrorInfo errorInfo = new ErrorInfo();
+        if(inputLayerValue.size() != inputNodes) {
+            errorInfo.setCode(INIT_STUDY_INPUTNODE_NUM_ERROR);
+        } else {
+            for(int i = 0;i < inputNodes;i ++) {
+                inputLayer.get(i).setX(inputLayerValue.get(i));
             }
         }
-        return pred;
+
+        return errorInfo;
+    }
+
+    public List<Double> predict(List<Double> inputLayerValue) {
+
+        ErrorInfo info = initPredict(inputLayerValue);
+        if(info.getCode() != IS_OK) {
+            System.out.println(info.getInfo());
+            return null;
+        } else {
+            forward();
+            List<Double> outputLayerValue = new LinkedList<>();
+            for(int i = 0;i < outputNodes;i ++) {
+                outputLayerValue.add(outputLayer.get(i).getX());
+            }
+            return outputLayerValue;
+        }
     }
 
     private void forward() {
